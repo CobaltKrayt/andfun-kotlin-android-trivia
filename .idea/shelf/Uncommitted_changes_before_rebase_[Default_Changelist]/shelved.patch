@@ -1,0 +1,112 @@
+Index: app/src/main/java/com/example/android/navigation/GameFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Copyright 2018, The Android Open Source Project\r\n *\r\n * Licensed under the Apache License, Version 2.0 (the \"License\");\r\n * you may not use this file except in compliance with the License.\r\n * You may obtain a copy of the License at\r\n *\r\n *     http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Unless required by applicable law or agreed to in writing, software\r\n * distributed under the License is distributed on an \"AS IS\" BASIS,\r\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n * See the License for the specific language governing permissions and\r\n * limitations under the License.\r\n */\r\n\r\npackage com.example.android.navigation\r\n\r\nimport android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.databinding.DataBindingUtil\r\nimport androidx.fragment.app.Fragment\r\nimport com.example.android.navigation.databinding.FragmentGameBinding\r\n\r\nclass GameFragment : Fragment() {\r\n    data class Question(\r\n            val text: String,\r\n            val answers: List<String>)\r\n\r\n    // The first answer is the correct one.  We randomize the answers before showing the text.\r\n    // All questions must have four answers.  We'd want these to contain references to string\r\n    // resources so we could internationalize. (or better yet, not define the questions in code...)\r\n    private val questions: MutableList<Question> = mutableListOf(\r\n            Question(text = \"What is Android Jetpack?\",\r\n                    answers = listOf(\"all of these\", \"tools\", \"documentation\", \"libraries\")),\r\n            Question(text = \"Base class for Layout?\",\r\n                    answers = listOf(\"ViewGroup\", \"ViewSet\", \"ViewCollection\", \"ViewRoot\")),\r\n            Question(text = \"Layout for complex Screens?\",\r\n                    answers = listOf(\"ConstraintLayout\", \"GridLayout\", \"LinearLayout\", \"FrameLayout\")),\r\n            Question(text = \"Pushing structured data into a Layout?\",\r\n                    answers = listOf(\"Data Binding\", \"Data Pushing\", \"Set Text\", \"OnClick\")),\r\n            Question(text = \"Inflate layout in fragments?\",\r\n                    answers = listOf(\"onCreateView\", \"onViewCreated\", \"onCreateLayout\", \"onInflateLayout\")),\r\n            Question(text = \"Build system for Android?\",\r\n                    answers = listOf(\"Gradle\", \"Graddle\", \"Grodle\", \"Groyle\")),\r\n            Question(text = \"Android vector format?\",\r\n                    answers = listOf(\"VectorDrawable\", \"AndroidVectorDrawable\", \"DrawableVector\", \"AndroidVector\")),\r\n            Question(text = \"Android Navigation Component?\",\r\n                    answers = listOf(\"NavController\", \"NavCentral\", \"NavMaster\", \"NavSwitcher\")),\r\n            Question(text = \"Registers app with launcher?\",\r\n                    answers = listOf(\"intent-filter\", \"app-registry\", \"launcher-registry\", \"app-launcher\")),\r\n            Question(text = \"Mark a layout for Data Binding?\",\r\n                    answers = listOf(\"<layout>\", \"<binding>\", \"<data-binding>\", \"<dbinding>\"))\r\n    )\r\n\r\n    lateinit var currentQuestion: Question\r\n    lateinit var answers: MutableList<String>\r\n    private var questionIndex = 0\r\n    private val numQuestions = Math.min((questions.size + 1) / 2, 3)\r\n\r\n    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,\r\n                              savedInstanceState: Bundle?): View? {\r\n\r\n        // Inflate the layout for this fragment\r\n        val binding = DataBindingUtil.inflate<FragmentGameBinding>(\r\n                inflater, R.layout.fragment_game, container, false)\r\n\r\n        // Shuffles the questions and sets the question index to the first question.\r\n        randomizeQuestions()\r\n\r\n        // Bind this fragment class to the layout\r\n        binding.game = this\r\n\r\n        // Set the onClickListener for the submitButton\r\n        binding.submitButton.setOnClickListener @Suppress(\"UNUSED_ANONYMOUS_PARAMETER\")\r\n        { view: View ->\r\n            val checkedId = binding.questionRadioGroup.checkedRadioButtonId\r\n            // Do nothing if nothing is checked (id == -1)\r\n            if (-1 != checkedId) {\r\n                var answerIndex = 0\r\n                when (checkedId) {\r\n                    R.id.secondAnswerRadioButton -> answerIndex = 1\r\n                    R.id.thirdAnswerRadioButton -> answerIndex = 2\r\n                    R.id.fourthAnswerRadioButton -> answerIndex = 3\r\n                }\r\n                // The first answer in the original question is always the correct one, so if our\r\n                // answer matches, we have the correct answer.\r\n                if (answers[answerIndex] == currentQuestion.answers[0]) {\r\n                    questionIndex++\r\n                    // Advance to the next question\r\n                    if (questionIndex < numQuestions) {\r\n                        currentQuestion = questions[questionIndex]\r\n                        setQuestion()\r\n                        binding.invalidateAll()\r\n                    } else {\r\n                        // We've won!  Navigate to the gameWonFragment.\r\n                    }\r\n                } else {\r\n                    // Game over! A wrong answer sends us to the gameOverFragment.\r\n                }\r\n            }\r\n        }\r\n        return binding.root\r\n    }\r\n\r\n    // randomize the questions and set the first question\r\n    private fun randomizeQuestions() {\r\n        questions.shuffle()\r\n        questionIndex = 0\r\n        setQuestion()\r\n    }\r\n\r\n    // Sets the question and randomizes the answers.  This only changes the data, not the UI.\r\n    // Calling invalidateAll on the FragmentGameBinding updates the data.\r\n    private fun setQuestion() {\r\n        currentQuestion = questions[questionIndex]\r\n        // randomize the answers into a copy of the array\r\n        answers = currentQuestion.answers.toMutableList()\r\n        // and shuffle them\r\n        answers.shuffle()\r\n        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_android_trivia_question, questionIndex + 1, numQuestions)\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/navigation/GameFragment.kt	(revision 01e6007d1cfad7becabb8155bb9358c20f2a5478)
++++ app/src/main/java/com/example/android/navigation/GameFragment.kt	(date 1604774482166)
+@@ -96,9 +96,11 @@
+                         setQuestion()
+                         binding.invalidateAll()
+                     } else {
++                        view.findNavController().navigate(R.id.action_gameFragment_to_gameWonFragment)
+                         // We've won!  Navigate to the gameWonFragment.
+                     }
+                 } else {
++                    view.findNavController().navigate(R.id.action_gameFragment_to_gameOverFragment2)
+                     // Game over! A wrong answer sends us to the gameOverFragment.
+                 }
+             }
+Index: app/src/main/res/navigation/navigation.xml.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/navigation/navigation.xml.xml	(date 1604774482220)
++++ app/src/main/res/navigation/navigation.xml.xml	(date 1604774482220)
+@@ -0,0 +1,39 @@
++<?xml version="1.0" encoding="utf-8"?>
++<navigation xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/navigation_graph"
++    app:startDestination="@id/titleFragment">
++
++    <fragment
++        android:id="@+id/titleFragment"
++        android:name="com.example.android.navigation.TitleFragment"
++        android:label="fragment_title"
++        tools:layout="@layout/fragment_title" >
++        <action
++            android:id="@+id/action_titleFragment_to_gameFragment"
++            app:destination="@id/gameFragment" />
++    </fragment>
++    <fragment
++        android:id="@+id/gameFragment"
++        android:name="com.example.android.navigation.GameFragment"
++        android:label="fragment_game"
++        tools:layout="@layout/fragment_game" >
++        <action
++            android:id="@+id/action_gameFragment_to_gameOverFragment2"
++            app:destination="@id/gameOverFragment2" />
++        <action
++            android:id="@+id/action_gameFragment_to_gameWonFragment"
++            app:destination="@id/gameWonFragment" />
++    </fragment>
++    <fragment
++        android:id="@+id/gameOverFragment2"
++        android:name="com.example.android.navigation.GameOverFragment"
++        android:label="fragment_game_over"
++        tools:layout="@layout/fragment_game_over" />
++    <fragment
++        android:id="@+id/gameWonFragment"
++        android:name="com.example.android.navigation.GameWonFragment"
++        android:label="fragment_game_won"
++        tools:layout="@layout/fragment_game_won" />
++</navigation>
+\ No newline at end of file
+Index: .idea/markdown-navigator.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"MarkdownProjectSettings\">\r\n    <PreviewSettings splitEditorLayout=\"SPLIT\" splitEditorPreview=\"PREVIEW\" useGrayscaleRendering=\"false\" zoomFactor=\"1.0\" maxImageWidth=\"0\" synchronizePreviewPosition=\"true\" highlightPreviewType=\"NONE\" highlightFadeOut=\"5\" highlightOnTyping=\"true\" synchronizeSourcePosition=\"true\" verticallyAlignSourceAndPreviewSyncPosition=\"true\" showSearchHighlightsInPreview=\"false\" showSelectionInPreview=\"true\" lastLayoutSetsDefault=\"false\">\r\n      <PanelProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.panel\" providerName=\"Default - Swing\" />\r\n      </PanelProvider>\r\n    </PreviewSettings>\r\n    <ParserSettings gitHubSyntaxChange=\"false\" correctedInvalidSettings=\"false\" emojiShortcuts=\"1\" emojiImages=\"0\">\r\n      <PegdownExtensions>\r\n        <option name=\"ATXHEADERSPACE\" value=\"true\" />\r\n        <option name=\"FENCED_CODE_BLOCKS\" value=\"true\" />\r\n        <option name=\"INTELLIJ_DUMMY_IDENTIFIER\" value=\"true\" />\r\n        <option name=\"RELAXEDHRULES\" value=\"true\" />\r\n        <option name=\"STRIKETHROUGH\" value=\"true\" />\r\n        <option name=\"TABLES\" value=\"true\" />\r\n        <option name=\"TASKLISTITEMS\" value=\"true\" />\r\n      </PegdownExtensions>\r\n      <ParserOptions>\r\n        <option name=\"COMMONMARK_LISTS\" value=\"true\" />\r\n        <option name=\"EMOJI_SHORTCUTS\" value=\"true\" />\r\n        <option name=\"GFM_TABLE_RENDERING\" value=\"true\" />\r\n        <option name=\"PRODUCTION_SPEC_PARSER\" value=\"true\" />\r\n        <option name=\"SIM_TOC_BLANK_LINE_SPACER\" value=\"true\" />\r\n      </ParserOptions>\r\n    </ParserSettings>\r\n    <HtmlSettings headerTopEnabled=\"false\" headerBottomEnabled=\"false\" bodyTopEnabled=\"false\" bodyBottomEnabled=\"false\" addPageHeader=\"true\" addAnchorLinks=\"false\" anchorLinksWrapText=\"false\" imageUriSerials=\"false\" addDocTypeHtml=\"true\" noParaTags=\"false\" defaultUrlTitle=\"false\" migratedPlantUml=\"true\" migratedAnchorLinks=\"true\" plantUmlConversion=\"0\">\r\n      <GeneratorProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.generator\" providerName=\"Default Swing HTML Generator\" />\r\n      </GeneratorProvider>\r\n      <headerTop />\r\n      <headerBottom />\r\n      <bodyTop />\r\n      <bodyBottom />\r\n      <fencedCodeConversions>\r\n        <option name=\"c4plantuml\" value=\"NONE\" />\r\n        <option name=\"ditaa\" value=\"NONE\" />\r\n        <option name=\"erd\" value=\"NONE\" />\r\n        <option name=\"graphviz\" value=\"NONE\" />\r\n        <option name=\"latex\" value=\"KATEX\" />\r\n        <option name=\"math\" value=\"KATEX\" />\r\n        <option name=\"mermaid\" value=\"NONE\" />\r\n        <option name=\"nomnoml\" value=\"NONE\" />\r\n        <option name=\"plantuml\" value=\"NONE\" />\r\n        <option name=\"puml\" value=\"NONE\" />\r\n        <option name=\"svgbob\" value=\"NONE\" />\r\n        <option name=\"umlet\" value=\"NONE\" />\r\n        <option name=\"vega\" value=\"NONE\" />\r\n        <option name=\"vegalite\" value=\"NONE\" />\r\n        <option name=\"wavedrom\" value=\"NONE\" />\r\n      </fencedCodeConversions>\r\n    </HtmlSettings>\r\n    <CssSettings previewScheme=\"UI_SCHEME\" cssUri=\"\" isCssUriEnabled=\"false\" isCssUriSerial=\"true\" isCssTextEnabled=\"false\" isDynamicPageWidth=\"true\">\r\n      <StylesheetProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.css\" providerName=\"Default Swing Stylesheet\" />\r\n      </StylesheetProvider>\r\n      <ScriptProviders />\r\n      <cssText />\r\n      <cssUriHistory />\r\n    </CssSettings>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/markdown-navigator.xml	(revision 01e6007d1cfad7becabb8155bb9358c20f2a5478)
++++ .idea/markdown-navigator.xml	(date 1604774482226)
+@@ -24,7 +24,7 @@
+         <option name="SIM_TOC_BLANK_LINE_SPACER" value="true" />
+       </ParserOptions>
+     </ParserSettings>
+-    <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="true" addAnchorLinks="false" anchorLinksWrapText="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" defaultUrlTitle="false" migratedPlantUml="true" migratedAnchorLinks="true" plantUmlConversion="0">
++    <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="true" addAnchorLinks="true" anchorLinksWrapText="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" defaultUrlTitle="false" migratedPlantUml="true" migratedAnchorLinks="true" plantUmlConversion="0">
+       <GeneratorProvider>
+         <provider providerId="com.vladsch.md.nav.editor.swing.html.generator" providerName="Default Swing HTML Generator" />
+       </GeneratorProvider>
+@@ -32,23 +32,7 @@
+       <headerBottom />
+       <bodyTop />
+       <bodyBottom />
+-      <fencedCodeConversions>
+-        <option name="c4plantuml" value="NONE" />
+-        <option name="ditaa" value="NONE" />
+-        <option name="erd" value="NONE" />
+-        <option name="graphviz" value="NONE" />
+-        <option name="latex" value="KATEX" />
+-        <option name="math" value="KATEX" />
+-        <option name="mermaid" value="NONE" />
+-        <option name="nomnoml" value="NONE" />
+-        <option name="plantuml" value="NONE" />
+-        <option name="puml" value="NONE" />
+-        <option name="svgbob" value="NONE" />
+-        <option name="umlet" value="NONE" />
+-        <option name="vega" value="NONE" />
+-        <option name="vegalite" value="NONE" />
+-        <option name="wavedrom" value="NONE" />
+-      </fencedCodeConversions>
++      <fencedCodeConversions />
+     </HtmlSettings>
+     <CssSettings previewScheme="UI_SCHEME" cssUri="" isCssUriEnabled="false" isCssUriSerial="true" isCssTextEnabled="false" isDynamicPageWidth="true">
+       <StylesheetProvider>

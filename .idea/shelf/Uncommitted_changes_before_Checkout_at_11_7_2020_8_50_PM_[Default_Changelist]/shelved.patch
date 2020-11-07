@@ -1,0 +1,185 @@
+Index: app/src/main/java/com/example/android/navigation/TitleFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Copyright 2018, The Android Open Source Project\r\n *\r\n * Licensed under the Apache License, Version 2.0 (the \"License\");\r\n * you may not use this file except in compliance with the License.\r\n * You may obtain a copy of the License at\r\n *\r\n *     http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Unless required by applicable law or agreed to in writing, software\r\n * distributed under the License is distributed on an \"AS IS\" BASIS,\r\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n * See the License for the specific language governing permissions and\r\n * limitations under the License.\r\n */\r\n\r\npackage com.example.android.navigation\r\n\r\nimport android.os.Bundle\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport androidx.databinding.DataBindingUtil\r\nimport androidx.fragment.app.Fragment\r\nimport androidx.navigation.Navigation\r\nimport com.example.android.navigation.databinding.FragmentTitleBinding\r\n\r\nclass TitleFragment : Fragment() {\r\n    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,\r\n                              savedInstanceState: Bundle?): View? {\r\n        val binding: FragmentTitleBinding = DataBindingUtil.inflate(\r\n                inflater, R.layout.fragment_title, container, false)\r\n        binding.playButton.setOnClickListener (\r\n                Navigation.createNavigateOnClickListener(R.id.action_titleFragment_to_gameFragment))\r\n        return binding.root\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/android/navigation/TitleFragment.kt	(revision 446e9e6bc15520c56e7c63fe33fe25bc9b7726c4)
++++ app/src/main/java/com/example/android/navigation/TitleFragment.kt	(date 1604775055563)
+@@ -17,11 +17,11 @@
+ package com.example.android.navigation
+ 
+ import android.os.Bundle
++import androidx.fragment.app.Fragment
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+ import androidx.databinding.DataBindingUtil
+-import androidx.fragment.app.Fragment
+ import androidx.navigation.Navigation
+ import com.example.android.navigation.databinding.FragmentTitleBinding
+ 
+@@ -35,3 +35,4 @@
+         return binding.root
+     }
+ }
++
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?><!--\r\n  ~ Copyright 2018, The Android Open Source Project\r\n  ~\r\n  ~ Licensed under the Apache License, Version 2.0 (the \"License\");\r\n  ~ you may not use this file except in compliance with the License.\r\n  ~ You may obtain a copy of the License at\r\n  ~\r\n  ~     http://www.apache.org/licenses/LICENSE-2.0\r\n  ~\r\n  ~ Unless required by applicable law or agreed to in writing, software\r\n  ~ distributed under the License is distributed on an \"AS IS\" BASIS,\r\n  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n  ~ See the License for the specific language governing permissions and\r\n  ~ limitations under the License.\r\n  -->\r\n\r\n<layout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"vertical\">\r\n            <fragment\r\n                android:id=\"@+id/myNavHostFragment\"\r\n                android:name=\"androidx.navigation.fragment.NavHostFragment\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                app:defaultNavHost=\"true\"\r\n                app:navGraph=\"@navigation/navigation\" />\r\n        </LinearLayout>\r\n\r\n</layout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 446e9e6bc15520c56e7c63fe33fe25bc9b7726c4)
++++ app/src/main/res/layout/activity_main.xml	(date 1604775055574)
+@@ -28,6 +28,17 @@
+                 android:layout_height="match_parent"
+                 app:defaultNavHost="true"
+                 app:navGraph="@navigation/navigation" />
++                <fragment
++                    android:id="@+id/titleFragment"
++                    android:name="com.example.android.navigation.TitleFragment"
++                    android:layout_width="match_parent"
++                    android:layout_height="match_parent"
++                    />
++
++                <!-- TODO (04) Add a fragment tag for the titleFragment in the LinearLayout
++                     Use @+id/titleFragment for the android:id
++                     Use com.example.android.navigation.TitleFragment for the android:name
++                     Use match_parent for the layout_height and layout_width -->
+         </LinearLayout>
+ 
+ </layout>
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Copyright 2018, The Android Open Source Project\r\n *\r\n * Licensed under the Apache License, Version 2.0 (the \"License\");\r\n * you may not use this file except in compliance with the License.\r\n * You may obtain a copy of the License at\r\n *\r\n *     http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Unless required by applicable law or agreed to in writing, software\r\n * distributed under the License is distributed on an \"AS IS\" BASIS,\r\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n * See the License for the specific language governing permissions and\r\n * limitations under the License.\r\n */\r\n\r\napply plugin: 'com.android.application'\r\n\r\napply plugin: 'kotlin-android'\r\n\r\napply plugin: 'kotlin-kapt'\r\n\r\napply plugin: 'androidx.navigation.safeargs'\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildFeatures {\r\n        dataBinding true\r\n    }\r\n    defaultConfig {\r\n        applicationId 'com.example.android.navigation'\r\n        minSdkVersion 19\r\n        targetSdkVersion 30\r\n        vectorDrawables.useSupportLibrary = true\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    productFlavors {\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(include: ['*.jar'], dir: 'libs')\r\n\r\n    // Kotlin\r\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$version_kotlin\"\r\n\r\n    // Constraint Layout\r\n    implementation \"androidx.constraintlayout:constraintlayout:$version_constraint_layout\"\r\n\r\n    // Core\r\n    implementation \"androidx.core:core:$version_core\"\r\n\r\n    // Material Design\r\n    implementation \"com.google.android.material:material:$version_material\"\r\n\r\n    // Navigation\r\n    implementation \"android.arch.navigation:navigation-fragment-ktx:$version_navigation\"\r\n    implementation \"android.arch.navigation:navigation-ui-ktx:$version_navigation\"\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 446e9e6bc15520c56e7c63fe33fe25bc9b7726c4)
++++ app/build.gradle	(date 1604774918530)
+@@ -63,4 +63,5 @@
+     // Navigation
+     implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
+     implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
++    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+ }
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/jarRepositories.xml	(date 1604774918564)
++++ .idea/jarRepositories.xml	(date 1604774918564)
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="BintrayJCenter" />
++      <option name="name" value="BintrayJCenter" />
++      <option name="url" value="https://jcenter.bintray.com/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="Google" />
++      <option name="name" value="Google" />
++      <option name="url" value="https://dl.google.com/dl/android/maven2/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_title2.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_title2.xml	(date 1604774918558)
++++ app/src/main/res/layout/fragment_title2.xml	(date 1604774918558)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".TitleFragment">
++
++    <!-- TODO: Update blank fragment layout -->
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:text="@string/hello_blank_fragment" />
++
++</FrameLayout>
+\ No newline at end of file
+Index: .idea/markdown-navigator.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"MarkdownProjectSettings\">\r\n    <PreviewSettings splitEditorLayout=\"SPLIT\" splitEditorPreview=\"PREVIEW\" useGrayscaleRendering=\"false\" zoomFactor=\"1.0\" maxImageWidth=\"0\" synchronizePreviewPosition=\"true\" highlightPreviewType=\"NONE\" highlightFadeOut=\"5\" highlightOnTyping=\"true\" synchronizeSourcePosition=\"true\" verticallyAlignSourceAndPreviewSyncPosition=\"true\" showSearchHighlightsInPreview=\"false\" showSelectionInPreview=\"true\" lastLayoutSetsDefault=\"false\">\r\n      <PanelProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.panel\" providerName=\"Default - Swing\" />\r\n      </PanelProvider>\r\n    </PreviewSettings>\r\n    <ParserSettings gitHubSyntaxChange=\"false\" correctedInvalidSettings=\"false\" emojiShortcuts=\"1\" emojiImages=\"0\">\r\n      <PegdownExtensions>\r\n        <option name=\"ATXHEADERSPACE\" value=\"true\" />\r\n        <option name=\"FENCED_CODE_BLOCKS\" value=\"true\" />\r\n        <option name=\"INTELLIJ_DUMMY_IDENTIFIER\" value=\"true\" />\r\n        <option name=\"RELAXEDHRULES\" value=\"true\" />\r\n        <option name=\"STRIKETHROUGH\" value=\"true\" />\r\n        <option name=\"TABLES\" value=\"true\" />\r\n        <option name=\"TASKLISTITEMS\" value=\"true\" />\r\n      </PegdownExtensions>\r\n      <ParserOptions>\r\n        <option name=\"COMMONMARK_LISTS\" value=\"true\" />\r\n        <option name=\"EMOJI_SHORTCUTS\" value=\"true\" />\r\n        <option name=\"GFM_TABLE_RENDERING\" value=\"true\" />\r\n        <option name=\"PRODUCTION_SPEC_PARSER\" value=\"true\" />\r\n        <option name=\"SIM_TOC_BLANK_LINE_SPACER\" value=\"true\" />\r\n      </ParserOptions>\r\n    </ParserSettings>\r\n    <HtmlSettings headerTopEnabled=\"false\" headerBottomEnabled=\"false\" bodyTopEnabled=\"false\" bodyBottomEnabled=\"false\" addPageHeader=\"true\" addAnchorLinks=\"true\" anchorLinksWrapText=\"false\" imageUriSerials=\"false\" addDocTypeHtml=\"true\" noParaTags=\"false\" defaultUrlTitle=\"false\" migratedPlantUml=\"true\" migratedAnchorLinks=\"true\" plantUmlConversion=\"0\">\r\n      <GeneratorProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.generator\" providerName=\"Default Swing HTML Generator\" />\r\n      </GeneratorProvider>\r\n      <headerTop />\r\n      <headerBottom />\r\n      <bodyTop />\r\n      <bodyBottom />\r\n      <fencedCodeConversions />\r\n    </HtmlSettings>\r\n    <CssSettings previewScheme=\"UI_SCHEME\" cssUri=\"\" isCssUriEnabled=\"false\" isCssUriSerial=\"true\" isCssTextEnabled=\"false\" isDynamicPageWidth=\"true\">\r\n      <StylesheetProvider>\r\n        <provider providerId=\"com.vladsch.md.nav.editor.swing.html.css\" providerName=\"Default Swing Stylesheet\" />\r\n      </StylesheetProvider>\r\n      <ScriptProviders />\r\n      <cssText />\r\n      <cssUriHistory />\r\n    </CssSettings>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/markdown-navigator.xml	(revision 446e9e6bc15520c56e7c63fe33fe25bc9b7726c4)
++++ .idea/markdown-navigator.xml	(date 1604774918540)
+@@ -24,7 +24,7 @@
+         <option name="SIM_TOC_BLANK_LINE_SPACER" value="true" />
+       </ParserOptions>
+     </ParserSettings>
+-    <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="true" addAnchorLinks="true" anchorLinksWrapText="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" defaultUrlTitle="false" migratedPlantUml="true" migratedAnchorLinks="true" plantUmlConversion="0">
++    <HtmlSettings headerTopEnabled="false" headerBottomEnabled="false" bodyTopEnabled="false" bodyBottomEnabled="false" addPageHeader="true" addAnchorLinks="false" anchorLinksWrapText="false" imageUriSerials="false" addDocTypeHtml="true" noParaTags="false" defaultUrlTitle="false" migratedPlantUml="true" migratedAnchorLinks="true" plantUmlConversion="0">
+       <GeneratorProvider>
+         <provider providerId="com.vladsch.md.nav.editor.swing.html.generator" providerName="Default Swing HTML Generator" />
+       </GeneratorProvider>
+@@ -32,7 +32,23 @@
+       <headerBottom />
+       <bodyTop />
+       <bodyBottom />
+-      <fencedCodeConversions />
++      <fencedCodeConversions>
++        <option name="c4plantuml" value="NONE" />
++        <option name="ditaa" value="NONE" />
++        <option name="erd" value="NONE" />
++        <option name="graphviz" value="NONE" />
++        <option name="latex" value="KATEX" />
++        <option name="math" value="KATEX" />
++        <option name="mermaid" value="NONE" />
++        <option name="nomnoml" value="NONE" />
++        <option name="plantuml" value="NONE" />
++        <option name="puml" value="NONE" />
++        <option name="svgbob" value="NONE" />
++        <option name="umlet" value="NONE" />
++        <option name="vega" value="NONE" />
++        <option name="vegalite" value="NONE" />
++        <option name="wavedrom" value="NONE" />
++      </fencedCodeConversions>
+     </HtmlSettings>
+     <CssSettings previewScheme="UI_SCHEME" cssUri="" isCssUriEnabled="false" isCssUriSerial="true" isCssTextEnabled="false" isDynamicPageWidth="true">
+       <StylesheetProvider>
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!--\r\n  ~ Copyright 2018, The Android Open Source Project\r\n  ~\r\n  ~ Licensed under the Apache License, Version 2.0 (the \"License\");\r\n  ~ you may not use this file except in compliance with the License.\r\n  ~ You may obtain a copy of the License at\r\n  ~\r\n  ~     http://www.apache.org/licenses/LICENSE-2.0\r\n  ~\r\n  ~ Unless required by applicable law or agreed to in writing, software\r\n  ~ distributed under the License is distributed on an \"AS IS\" BASIS,\r\n  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n  ~ See the License for the specific language governing permissions and\r\n  ~ limitations under the License.\r\n  -->\r\n\r\n<resources>\r\n    <string name=\"app_name\">Android Trivia</string>\r\n    <string name=\"game_over\">Game Over</string>\r\n    <string name=\"try_again\">Try Again?</string>\r\n    <string name=\"position\">Position</string>\r\n    <string name=\"select_an_avatar\">Select an Avatar</string>\r\n    <string name=\"android_trivia\">Android Trivia</string>\r\n    <string name=\"about_text\">Android Trivia will help remind you of important concepts you have learned and will learn in Android development.\\n\\nConsider modifying the questions and graphics to make this game your own!</string>\r\n    <string name=\"rules_text\">Select the answer from the options given. Each time you get an answer correct, you advance to the next question.\\n\\nIf you get the answer wrong, your game ends! You can return to the title screen using up or back from within the game screen, and this will also end your game.</string>\r\n    <string name=\"rules\">Rules</string>\r\n    <string name=\"about\">About</string>\r\n    <string name=\"trivia_hint\">Trivia Hint</string>\r\n    <string name=\"title_android_trivia_question\">Android Trivia (%1$d/%2$d)</string>\r\n    <string name=\"title_about_trivia\">About Trivia</string>\r\n    <string name=\"title_trivia_rules\">Trivia Rules</string>\r\n    <string name=\"share_success_text\">I mastered #UdacityAndroidTrivia with %1$d/%2$d correct questions!</string>\r\n    <string name=\"submit_button\">Submit</string>\r\n    <string name=\"congratulations\">Congratulations!</string>\r\n    <string name=\"share\">Share</string>\r\n    <string name=\"sharing_not_available\">Sharing Not Available</string>\r\n</resources>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 446e9e6bc15520c56e7c63fe33fe25bc9b7726c4)
++++ app/src/main/res/values/strings.xml	(date 1604774918547)
+@@ -34,4 +34,6 @@
+     <string name="congratulations">Congratulations!</string>
+     <string name="share">Share</string>
+     <string name="sharing_not_available">Sharing Not Available</string>
++    <!-- TODO: Remove or change this placeholder text -->
++    <string name="hello_blank_fragment">Hello blank fragment</string>
+ </resources>
