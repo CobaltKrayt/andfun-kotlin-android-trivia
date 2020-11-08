@@ -33,7 +33,7 @@ import androidx.navigation.findNavController
 import com.example.android.navigation.databinding.FragmentGameWonBinding
 import android.content.pm.ResolveInfo
 import android.content.pm.PackageManager
-
+import androidx.navigation.Navigation
 
 
 class GameWonFragment : Fragment() {
@@ -42,6 +42,7 @@ class GameWonFragment : Fragment() {
         // Inflate the layout for this fragment
         val binding: FragmentGameWonBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_game_won, container, false)
+        binding.nextMatchButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_gameWonFragment_to_gameFragment))
         return binding.root
     }
 }
