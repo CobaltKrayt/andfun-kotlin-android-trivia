@@ -31,9 +31,55 @@ class GameWonFragment : Fragment() {
             view.findNavController().navigate(GameWonFragmentDirections.actionGameWonFragmentToGameFragment())
         }
 
+        setHasOptionsMenu(true)
+
         //we are grabing the arguments we sent in gamefragments using bundles and safeargs
-        var args = GameWonFragmentArgs.fromBundle(arguments!!)
-        Toast.makeText(context,"NumCorrect: ${args.numCorrect}, NumQuestions: ${args.numQuestions}", Toast.LENGTH_LONG).show()
+        /*var args = GameWonFragmentArgs.fromBundle(arguments!!)
+        Toast.makeText(context,"NumCorrect: ${args.numCorrect}, NumQuestions: ${args.numQuestions}", Toast.LENGTH_LONG).show()*/
         return binding.root
+    }
+
+    // manages the Intent type and variables
+    private fun getShareIntent(): Intent{
+
+        //we get the arguments from the bundle
+        var args = GameWonFragmentArgs.fromBundle(arguments!!)
+
+        // we create the value through which we are sharing the data
+        val shareIntent = Intent(Intent.ACTION_SEND)
+            // we pass type, extra variables via putExtra which takes the type of variables we are sending, in this case EXTRA_INTENT and the values themselves
+            shareIntent.setType("text/plain").putExtra(Intent.EXTRA_INTENT,getString(R.string.share_success_text,args.numCorrect,args.numQuestions))
+
+        return shareIntent
+    }
+
+    // passes our intent to startActivity
+    private fun shareSuccess(){
+        // we start an intent that is associated with this fragment
+        startActivity(getShareIntent())
+    }
+
+    // this function inflates the winner_menu and handles the mismatched intent type if necessary
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.winner_menu,menu)
+
+        if (getShareIntent().resolveActivity(activity!!.packageManager) == null)
+        {
+            // hide menu if it the type of Intent that we are sending isnt matched on the receiving end
+            menu?.findItem(R.id.share)?.setVisible(false)
+        }
+    }
+
+    // this function override calls shareSuccess if the item id matches the one of the share button and otherwise opens the other options
+    // this could handle multiple buttons and intents if desired... or so I believe
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item!!.itemId){
+            R.id.share-> shareSuccess()
+        }
+
+        return super.onOptionsItemSelected(item)
+
     }
 }

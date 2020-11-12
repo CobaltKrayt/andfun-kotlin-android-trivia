@@ -33,14 +33,14 @@ class TitleFragment : Fragment() {
         setHasOptionsMenu(true)
         binding.playButton.setOnClickListener { view: View -> view.findNavController().navigate(TitleFragmentDirections.actionTitleFragmentToGameFragment()) }
 
-        //lambda variant
-        //binding.playButton.setOnClickListener{view: View -> view.findNavController().navigate(R.id.action_titleFragment_to_gameFragment)}
+        // lambda variant
+        // binding.playButton.setOnClickListener{view: View -> view.findNavController().navigate(R.id.action_titleFragment_to_gameFragment)}
 
         return binding.root
     }
 
-    //The use ofthese two functions is how to make the about menu work
-    //this inflates the menu
+    // The use of these two functions is how to make the about menu work
+    // this inflates the menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -48,8 +48,8 @@ class TitleFragment : Fragment() {
         inflater?.inflate(R.menu.overflow_menu, menu)
     }
 
-    //this connects our options menu to the navigation ui
-    //its called when you select an item from the options menu
+    // this connects our options menu to the navigation ui
+    // its called when you select an item from the options menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         //the menu item had a destination and this attempts to navigate to that destination using the navcontroller we set out in navigation xml and iin main activity
